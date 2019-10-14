@@ -3,7 +3,7 @@ import datetime
 
 from github import Github
 from jinja2 import Environment, FileSystemLoader
-
+from weasyprint import HTML
 
 def render_template(template_filename, context):
     """
@@ -29,6 +29,7 @@ def create_report(type, data, org):
 
     template_name = "report_users.jinja"
     output_report = "report.html"
+    output_pdf = "report.pdf"
 
     context = {
         'type': type,
@@ -39,6 +40,7 @@ def create_report(type, data, org):
     with open(output_report, 'w') as f:
         report = render_template(template_name, context)
         f.write(report)
+    HTML(filename=output_report).write_pdf(output_pdf)
 
 
 def get_date():
