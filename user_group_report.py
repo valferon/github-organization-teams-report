@@ -1,9 +1,10 @@
-import os
 import datetime
+import os
 
 from github import Github
 from jinja2 import Environment, FileSystemLoader
 from weasyprint import HTML
+
 
 def render_template(template_filename, context):
     """
@@ -65,6 +66,7 @@ def main():
     g = Github(access_token)
 
     all_teams = g.get_organization(organization).get_teams()
+
     total_number_of_repos = g.get_organization(organization).owned_private_repos + g.get_organization(
         organization).public_repos
 
@@ -72,7 +74,7 @@ def main():
     for team in all_teams:
         team_summary[team.name] = {}
         team_summary[team.name]['members'] = []
-        team_summary[team.name]['repositories'] = []
+        team_summary[team.name]['repositories'] = {}
         team_summary[team.name]['count'] = ""
         team_members = team.get_members()
         for member in team_members:
@@ -81,8 +83,7 @@ def main():
             else:
                 team_summary[team.name]['members'].append("{} ({})".format(member.login, str(member.name)))
         for repository in team.get_repos():
-            team_summary[team.name]['repositories'].append(repository.name)
-        team_summary[team.name]['repositories'].sort()
+            team_summary[team.name]['repositories'].update({repository.name: repository.permissions})
 
     for team in team_summary:
         count = (len(team_summary[team]['repositories']))
