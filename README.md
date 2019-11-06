@@ -3,6 +3,7 @@
 ## Description
 
 Python script that generates a html report about teams, users, and repositories
+Created to easily generate data to provide for a SOC audit of github permissions
 
 ---
 ### Scripts
